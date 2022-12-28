@@ -1,0 +1,12 @@
+.teacher-navbar{
+    width: 100%;
+    height: 120px;
+    background-color: #F53838;
+}
+
+.navbar-elements{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    
+}

@@ -1,0 +1,81 @@
+.eduapp-logo img{
+    width: 170px;
+}
+
+
+
+.nav-list{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-list a{
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+}
+
+.login-button button{
+    background-color: white;
+    border: 2px solid #F53838;
+    font-weight: 600;
+    width: 100px;
+    height: 35px;
+    border-radius: 20px;
+}
+
+.login-button button:hover{
+    background-color: #F53838;
+    color: white;
+}
+
+.register-button button{
+    background-color: #F53838;
+    border: none;
+    width: 100px;
+    height: 35px;
+    border-radius: 20px;
+    font-weight: 600;
+    color: white;
+
+}
+
+.landing-heading1{
+    font-size: 35px;
+    font-weight: 600;
+    text-align: start;
+}
+
+.landing-description1{
+    font-size: 16px;
+    font-weight: 400;
+    text-align: start;
+}
+
+.landing-heading2{
+    font-size: 35px;
+    font-weight: 600;
+    text-align: end;
+}
+
+.landing-description2{
+    font-size: 16px;
+    font-weight: 400;
+    text-align: end;
+}
+
+.landing-image{
+    width: 612px;
+}
+
+.landing-button{
+    background-color: #F53838;
+    border: none;
+    border-radius: 10px;
+    width: 150px;
+    height: 45px;
+    color: white;
+    font-weight: 500;
+}
