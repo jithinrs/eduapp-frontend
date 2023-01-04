@@ -6,6 +6,8 @@ import loginImage from '../staticImages/signin.jpg'
 import { NavBar } from "../Components/navBar";
 import './style.css'
 import AuthContext from "../context/authcontext";
+import { Snackbar, Button, IconButton } from "@mui/material";
+// import CloseIcon from '@mui/icons-material/Close';
 
 export function Loginpage() {
     const [email, setEmail] = useState('');
@@ -16,8 +18,12 @@ export function Loginpage() {
 
     const navigate = useNavigate()
 
-    let {loginuser} =useContext(AuthContext)
-    let {loginsubmit} = useContext(AuthContext)
+    let { loginuser } = useContext(AuthContext)
+    let { loginsubmit } = useContext(AuthContext)
+
+    let { open } = useContext(AuthContext)
+    let { setOpen } = useContext(AuthContext)
+    let { alertMessage } = useContext(AuthContext)
 
     const handleEmail = (e) => {
         setEmail(e.target.value);
@@ -29,6 +35,31 @@ export function Loginpage() {
         setPassword(e.target.value);
         setSubmitted(false);
     };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const action = (
+        <React.Fragment>
+            <Button color="secondary" size="small" onClick={handleClose}>
+                X
+            </Button>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleClose}
+            >
+                {/* <CloseIcon fontSize="small" /> */}
+            </IconButton>
+        </React.Fragment>
+    );
+
 
     // Handling the form submission
     const handleSubmit = (e) => {
@@ -77,7 +108,7 @@ export function Loginpage() {
 
     return (
         <div>
-           
+
 
             <div className="row register-maindiv">
                 <div className="col">
@@ -103,8 +134,15 @@ export function Loginpage() {
                         </button> */}
                     </form>
                     <div>
-                        <Link to ='/otplogin'>Log in with OTP</Link>
+                        <Link to='/otplogin'>Log in with OTP</Link>
                     </div>
+                    <Snackbar
+                        open={open}
+                        autoHideDuration={2000}
+                        onClose={handleClose}
+                        message={alertMessage}
+                        action={action}
+                    />
                 </div>
 
             </div>

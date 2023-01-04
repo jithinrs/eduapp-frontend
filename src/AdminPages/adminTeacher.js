@@ -8,7 +8,7 @@ export function Adminteacher() {
     const [teacher, setTeacher] = useState([])
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/admin_eduapp/teachers_list').then((response) => {
+        axios.get('http://127.0.0.1:8000/admin_eduapp/teachers-list').then((response) => {
             console.log(response.data);
             setTeacher(response.data)
         })
@@ -39,9 +39,9 @@ export function Adminteacher() {
 
                             <tr>
                                 <td>{key + 1}</td>
-                                <td>{person.first_name + " " + person.last_name}</td>
-                                <td>{person.email}</td>
-                                <td>{person.phone_number}</td>
+                                <td>{person.get_teacher_name}</td>
+                                <td>{person.get_teacher_email}</td>
+                                <td>{person.get_teacher_mobile}</td>
                             </tr>
 
                         )

@@ -42,9 +42,22 @@ export const AdminRoute = () => {
 }
 
 export const TeacherRoute = () => {
-  let {userRole} = useContext(AuthContext)
-
+  let {tokendetails} = useContext(AuthContext)
+  let role = ""
+  tokendetails?role = tokendetails.Roles:role = null
   return(
-    userRole === 'teacher' ? <Outlet /> : <Navigate to ='/' />
+    role === 'T' ? <Outlet /> : <Navigate to ='login' />
+  )
+}
+
+export const StudentRoute = () => {
+  
+  let {tokendetails} = useContext(AuthContext)
+  // console.log(tokendetails);
+  let role = ""
+  tokendetails?role = tokendetails.Roles:role = null
+  return (
+
+    role == "S"? <Outlet /> : <Navigate to = 'login' />
   )
 }

@@ -10,15 +10,21 @@ import { Studenthome } from "../student/studentHome";
 // import { Link, Outlet } from "react-router-dom";
 export function LandingPage() {
     
-  let {userRole} = useContext(AuthContext)
+//   let {userRole} = useContext(AuthContext)
+  let {tokendetails} = useContext(AuthContext)
+  console.log(tokendetails);
 
+  let userRole = ""
+  tokendetails? userRole = tokendetails.Roles : userRole = null
+  console.log(userRole);
     return (
         <div>
             <NavBar></NavBar>
             <div className="space-after-nav"></div>
-            {
-                userRole==='teacher' ?   <TeacherHome></TeacherHome> : userRole === 'student' ? <Studenthome></Studenthome>: <Nonlanding></Nonlanding> 
-            }
+            {/* {
+                userRole==='T' ?   <TeacherHome></TeacherHome> : userRole === 'S' ? <Studenthome></Studenthome>: <Nonlanding></Nonlanding> 
+            } */}
+            <Nonlanding></Nonlanding>
            
         </div>
     )

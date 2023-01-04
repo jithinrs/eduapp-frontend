@@ -1,29 +1,27 @@
 import React, { useContext } from "react";
 import AuthContext from "../context/authcontext";
-// import { NavBar } from "../Components/navBar";
+import { NavBar } from "../Components/navBar";
+import { StudentNavbar } from "../Components/studentNavbar";
 import './style.css'
 
 
 
 export function Studenthome() {
 
-    const { firstname } = useContext(AuthContext)
+    // const { firstname } = useContext(AuthContext)
+    const { tokendetails } = useContext(AuthContext)
+    console.log(tokendetails);
+    let verified1 = tokendetails.verified
+    console.log(verified1);
 
     return (
         <div>
-            <div className="teacher-navbar  d-flex align-items-end">
-                <div className="container">
-                    <div>
-                        <h2 className="text-start">Hi, {firstname}</h2>
-                    </div>
-                    <div className="navbar-elements mb-3">
-                        <h6>My classes</h6>
-                        <h6>Saved Notes</h6>
-                        <h6>Edit Profile</h6>
-                    </div>
-
-                </div>
-            </div>
+            <NavBar></NavBar>
+            <StudentNavbar></StudentNavbar>
+            {
+                
+            }
+            
         </div>
     )
 }

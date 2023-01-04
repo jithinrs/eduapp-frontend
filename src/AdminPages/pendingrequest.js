@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 import { AdminBase } from "./adminMain";
 
@@ -8,7 +9,7 @@ export function PendingRequests() {
     const [pendingRequests, setPendingRequests] = useState([])
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/admin_eduapp/pending-requests').then((response) => {
+        axios.get('http://127.0.0.1:8000/admin_eduapp/teachers-list').then((response) => {
             console.log(response.data);
             setPendingRequests(response.data)
         })
@@ -30,18 +31,22 @@ export function PendingRequests() {
                         <th scope="col">Name</th>
                         <th scope="col">email</th>
                         <th scope="col">Phone Number</th>
+                        <th scope ="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {pendingRequests.map((requests, key) => {
-                        console.log(requests.first_name);
+                    {pendingRequests.map((person, key) => {
                         return (
 
                             <tr>
                                 <td>{key + 1}</td>
-                                <td>{requests.teacher_id.first_name + " " + requests.teacher_id.last_name}</td>
-                                <td>{requests.teacher_id.email}</td>
-                                <td>{requests.teacher_id.phone_number}</td>
+                                <td>{person.get_teacher_name}</td>
+                                <td>{person.get_teacher_email}</td>
+                                <td>{person.get_teacher_mobile}</td>
+                                {/* {let test = "hello"} */}
+                                <td>
+                                    <Link to={{pathname:`/admint/check-pending-requests/${person.user_id}`,state: { users: person }}}><button>test</button></Link>
+                                </td>
                             </tr>
 
                         )

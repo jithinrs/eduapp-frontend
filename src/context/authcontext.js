@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { Snackbar } from "@mui/material";
 
 const AuthContext = createContext()
 
@@ -12,6 +13,7 @@ export default AuthContext;
 export const AuthProvider = ({ children }) => {
 
     let [user, setUser] = useState(() => localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null)
+    let [tokendetails, setTokendetails] = useState(() => localStorage.getItem('tokendetails') ? JSON.parse(localStorage.getItem('tokendetails')): null)
     let [authtokens, setAuthtokens] = useState(() => localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null)
     let [firstname, setFirstname] = useState(() => localStorage.getItem('firstname') ? JSON.parse(localStorage.getItem('firstname')) : null)
     let [isAdmin, setIsAdmin] = useState(() => localStorage.getItem('isAdmin') ? localStorage.getItem('isAdmin') : null)
@@ -20,24 +22,13 @@ export const AuthProvider = ({ children }) => {
 
     let [number, setNumber] = useState('')
     let [otpstatus, setOtpstatus] = useState('no')
+    let [open, setOpen] = useState(false)
+    let [alertMessage, setAlertMessage] = useState('')
 
     const navigate = useNavigate()
 
-    let loginuser = async (e) => {
-        e.preventDefault();
-        console.log("hello hkjhkj");
-        // let response = fetch('http://127.0.0.1:8000/account/login',{
-        //     method : 'POST',
-        //     headers : {
-        //         'Content-type' : 'application/json'
-        //     },
-        //     body : JSON.stringify({'email': null, 'password' : null})
-        // })
-    }
-
     const loginsubmit = (e) => {
         e.preventDefault();
-        console.log("work ayade?");
         let email = e.target.email.value
         let password = e.target.password.value
         if (email === '' || password === '') {
@@ -48,20 +39,25 @@ export const AuthProvider = ({ children }) => {
                 email: email,
                 password: password
             }).then((res) => {
-                // console.log(res.data.token.access);
-                // console.log(res);
+                // console.log(res.data);
                 if (res.data.message === "Invalid email or password!") {
-                    console.log("poda");
-                    window.alert("something went wrong!")
-                }else if(res.data.message === "User is not Verified"){
-                    window.alert("user not verified")
+                    setAlertMessage("Invalid Email or password")
+                    setOpen(true)
+            
+                } else if (res.data.message === "User is not Verified") {
+                    setAlertMessage("User is not Verified")
+                    setOpen(true)
                 }
-                
+
                 else {
-                    if(res.data.user.isStudent == true){
+                    let tokendetail = jwt_decode(res.data.token.access)
+                    setTokendetails(tokendetail)
+                    localStorage.setItem('tokendetails', JSON.stringify(tokendetail))
+                    console.log(tokendetails);
+                    if (tokendetail?.Roles == "S") {
                         setuserRole('student')
                         localStorage.setItem('role', JSON.stringify('student'))
-                    } else if(res.data.user.isTeacher == true){
+                    } else if (tokendetail?.Roles == "T") {
                         setuserRole('teacher')
                         localStorage.setItem('role', JSON.stringify('teacher'))
                     }
@@ -74,13 +70,19 @@ export const AuthProvider = ({ children }) => {
                     console.log(test23.user_id);
                     setUser(res.data)
                     // localStorage.setItem('user', test23.user_id)
-                  
+
                     localStorage.setItem('firstname', JSON.stringify(res.data.user.firstname))
                     localStorage.setItem('email', JSON.stringify(res.data.user.email))
                     console.log(res.data.user.email);
                     localStorage.setItem('authToken', JSON.stringify(res.data))
                     localStorage.setItem('isAdmin', JSON.stringify(res.data.user.isAdmin))
-                    navigate('/')
+                    if (tokendetail?.Roles == "S") {
+                        navigate('student-home')
+                    } else if (tokendetail?.Roles == "T") {
+                        navigate('teacher-home')
+                    } else {
+                        navigate('/')
+                    }
                     // console.log(res.data.token.access);
                 }
             })
@@ -150,12 +152,14 @@ export const AuthProvider = ({ children }) => {
         setIsAdmin(null)
         setUserEmail(null)
         setuserRole(null)
+        setTokendetails(null)
         localStorage.removeItem('authToken')
         localStorage.removeItem('firstname')
         localStorage.removeItem('isAdmin')
         localStorage.removeItem('email')
         localStorage.removeItem('user')
         localStorage.removeItem('role')
+        localStorage.removeItem('tokendetails')
     }
 
 
@@ -184,7 +188,7 @@ export const AuthProvider = ({ children }) => {
                     setUser(jwt_decode(res.data.token.access))
                     console.log(jwt_decode(res.data.token.access))
                     localStorage.setItem('firstname', JSON.stringify(res.data.user.firstname))
-                    localStorage.setItem('authToken',(res.data))
+                    localStorage.setItem('authToken', (res.data))
                     navigate('/')
                     // console.log(res.data.token.access);
                 }
@@ -196,13 +200,18 @@ export const AuthProvider = ({ children }) => {
     };
 
     let contextData = {
+        open : open,
         user: user,
-        userRole:userRole,
+        userRole: userRole,
         userEmail: userEmail,
         firstname: firstname,
         otpstatus: otpstatus,
-        isAdmin : isAdmin,
-        setuserRole:setuserRole,
+        isAdmin: isAdmin,
+        alertMessage:alertMessage,
+        tokendetails:tokendetails,
+
+        setOpen : setOpen,
+        setuserRole: setuserRole,
         loginsubmit: loginsubmit,
         Otploginphone: Otploginphone,
         otpsubmit: otpsubmit,
