@@ -11,6 +11,12 @@
     align-items: center;
 }
 
+.navbartest1{
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+}
+
 .nav-list a{
     text-decoration: none;
     color: black;

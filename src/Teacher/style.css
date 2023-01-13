@@ -10,3 +10,23 @@
     gap: 20px;
     
 }
+
+.add-content{
+    background-color: #F53838;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    width: 100px;
+}
+
+
+.material-div-main{
+    width: 70%;
+    margin: auto;
+}
+
+
+.course-material-link{
+    text-decoration: none;
+    color: #F53838;
+}

@@ -18,8 +18,15 @@ import { TeacherApplication } from './Application/teacherApplication';
 
 
 import { TeacherHome } from './Teacher/teacherHome';
+import { CoursePage } from './Teacher/courses';
+import { EachCourse } from './Teacher/EachCourse';
+import { ChapterMaterial } from './Teacher/ChapterMaterials';
 
 import { Studenthome } from './student/studentHome';
+
+import { AllCoursePage } from './allCourses/allCoursepage';
+import { ViewEachCourse } from './allCourses/viewEachCourse';
+import { ViewChapterMaterial } from './allCourses/viewStudyMaterials';
 
 import { Admindashboard } from './AdminPages/adminDashboard';
 import { Adminteacher } from './AdminPages/adminTeacher';
@@ -55,12 +62,19 @@ function App() {
             </Route>
 
             <Route element = {<StudentRoute />} >
+              <Route path = 'browse-courses' element={<AllCoursePage />} />
+              <Route path = 'browse-courses/:newid' element={<ViewEachCourse />} />
+              <Route path = 'browse-courses/:newid/:newid1' element={<ViewChapterMaterial />} />
               <Route path='student-home' element = {<Studenthome />} />
             </Route>
 
 
             <Route element = {<TeacherRoute/>}>
               <Route path = 'teacher-home' element={<TeacherHome />} />
+              <Route path = 'course-page' element={<CoursePage />} />
+              <Route path = 'course-page/:id' element={<EachCourse />} />
+              <Route path = 'course-page/:id/:id1' element={<ChapterMaterial />} />
+              
             </Route>
 
 

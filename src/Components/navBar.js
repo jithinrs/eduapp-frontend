@@ -7,6 +7,8 @@ import AuthContext from "../context/authcontext";
 export function NavBar() {
     let { firstname } = useContext(AuthContext)
     let { logoutUser } = useContext(AuthContext)
+    let { tokendetails} = useContext(AuthContext)
+    console.log(tokendetails);
     return (
         <div className="container d-flex justify-content-between">
             <div className="eduapp-logo">
@@ -25,8 +27,13 @@ export function NavBar() {
                 ? <div className="register-login d-flex justify-content-between gap-3 align-items-center">
                     
                     <div className="login-button">
-                        
+                        { tokendetails.Roles == "S"?
+                            <Link to='/student-home'>
+                                <button>{`hi ${firstname}`}</button>
+                            </Link>
+                            :
                             <button>{`hi ${firstname}`}</button>
+                        }
                         
                     </div>
                     <div className="register-button">

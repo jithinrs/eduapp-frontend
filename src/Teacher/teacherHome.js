@@ -20,9 +20,12 @@ export function TeacherHome() {
     const { firstname } = useContext(AuthContext)
     const { user } = useContext(AuthContext)
     const { tokendetails } = useContext(AuthContext)
+    const { tokenrefresher } = useContext(AuthContext)
 
     // console.log(tokendetails);
     let check = tokendetails.datafilled
+    let checkdata = tokendetails.verified
+    console.log((tokendetails));
     console.log(check);
 
     const handleDelete = () => {
@@ -35,22 +38,17 @@ export function TeacherHome() {
     const handlesubject = (e) => {
         let value = e.target.value
         setSelSubjects([...selSubject, value])
-        // let test1 = Array.from(new Set(selSubject))
-        // console.log(test1);
         console.log(selSubject);
 
     }
 
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/courses/all-subjects').then((response) => {
-            console.log("podey");
-            // setStudent(response.data)
             setAlldubjects(response.data)
         })
 
     }, [])
-    // console.log("hello");
-    // console.log(allsubjects);
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -63,8 +61,26 @@ export function TeacherHome() {
         data.append('subject', selSubject)
         console.log(data);
         axios.post('http://127.0.0.1:8000/teacher/teacher-create', data).then((res) => {
+            tokenrefresher()
+        })
+    }
+
+    const courseSubmit = (e) => {
+        e.preventDefault()
+        console.log("course func");
+        const data = new FormData()
+        data.append('user_id', user.user.user_id)
+        data.append('image', e.target.image.files[0])
+        data.append('subject_id', e.target.subject.value)
+        data.append('grade', e.target.grade.value)
+        // data.append('title', e.target.title.value)
+        data.append('course_description', e.target.course_description.value)
+
+        console.log(data);
+        axios.post('http://127.0.0.1:8000/courses/create-course',data).then((res) => {
             console.log(res);
         })
+
     }
 
     return (
@@ -119,7 +135,13 @@ export function TeacherHome() {
                             </div>
                         </div>
                     </div>
-                </div> : null
+                </div> : checkdata == false ?
+                    <div>
+                        <h2>Your data is under verification</h2>
+                    </div> :
+                    <div>
+                        test
+                    </div>
             }
         </div>
     )

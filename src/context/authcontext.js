@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { Snackbar } from "@mui/material";
+
 
 const AuthContext = createContext()
 
@@ -13,7 +13,8 @@ export default AuthContext;
 export const AuthProvider = ({ children }) => {
 
     let [user, setUser] = useState(() => localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null)
-    let [tokendetails, setTokendetails] = useState(() => localStorage.getItem('tokendetails') ? JSON.parse(localStorage.getItem('tokendetails')): null)
+    let [tokendetails, setTokendetails] = useState(() => localStorage.getItem('tokendetails') ? JSON.parse(localStorage.getItem('tokendetails')) : null)
+    //let [authTokens, setAuthTokens] = useState(()=> localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
     let [authtokens, setAuthtokens] = useState(() => localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null)
     let [firstname, setFirstname] = useState(() => localStorage.getItem('firstname') ? JSON.parse(localStorage.getItem('firstname')) : null)
     let [isAdmin, setIsAdmin] = useState(() => localStorage.getItem('isAdmin') ? localStorage.getItem('isAdmin') : null)
@@ -43,7 +44,7 @@ export const AuthProvider = ({ children }) => {
                 if (res.data.message === "Invalid email or password!") {
                     setAlertMessage("Invalid Email or password")
                     setOpen(true)
-            
+
                 } else if (res.data.message === "User is not Verified") {
                     setAlertMessage("User is not Verified")
                     setOpen(true)
@@ -79,16 +80,18 @@ export const AuthProvider = ({ children }) => {
                     if (tokendetail?.Roles == "S") {
                         navigate('student-home')
                     } else if (tokendetail?.Roles == "T") {
+                        console.log("hellopoda");
+                        console.log(tokendetail);
+                        console.log("hellopoda");
                         navigate('teacher-home')
                     } else {
                         navigate('/')
                     }
-                    // console.log(res.data.token.access);
+                  
                 }
             })
 
-            // setSubmitted(true);
-            // setError(false);
+     
         }
     };
 
@@ -143,6 +146,41 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const tokenrefresher = () => {
+        console.log("refreshed");
+        let user_id = user.user.user_id
+        console.log((user_id));
+        axios.post('http://127.0.0.1:8000/account/tokenrefresher', { user_id: user_id }).then((res) => {
+            console.log(res);
+            let tokendetail = jwt_decode(res.data.token.access)
+            setTokendetails(tokendetail)
+            localStorage.setItem('tokendetails', JSON.stringify(tokendetail))
+            console.log(tokendetails);
+            if (tokendetail?.Roles == "S") {
+                setuserRole('student')
+                localStorage.setItem('role', JSON.stringify('student'))
+            } else if (tokendetail?.Roles == "T") {
+                setuserRole('teacher')
+                localStorage.setItem('role', JSON.stringify('teacher'))
+            }
+            setAuthtokens(res.data)
+            setFirstname(res.data.user.firstname)
+            setIsAdmin(res.data.user.isAdmin)
+            setUserEmail(res.data.user.email)
+            // console.log(res.data.user.firstname);
+            const test23 = jwt_decode(res.data.token.access)
+            console.log(test23.user_id);
+            setUser(res.data)
+            // localStorage.setItem('user', test23.user_id)
+
+            localStorage.setItem('firstname', JSON.stringify(res.data.user.firstname))
+            localStorage.setItem('email', JSON.stringify(res.data.user.email))
+            console.log(res.data.user.email);
+            localStorage.setItem('authToken', JSON.stringify(res.data))
+            localStorage.setItem('isAdmin', JSON.stringify(res.data.user.isAdmin))
+        })
+
+    }
 
     const logoutUser = (e) => {
         e.preventDefault()
@@ -163,59 +201,54 @@ export const AuthProvider = ({ children }) => {
     }
 
 
-    const updateToken = (e) => {
+    const updateToken = async (e) => {
         e.preventDefault();
         console.log("work ayade?");
         let email = e.target.email.value
         let password = e.target.password.value
         if (email === '' || password === '') {
-            // setError(true);
             window.alert("enter correct")
         } else {
-            axios.post('http://127.0.0.1:8000/account/api/token/refesh', {
+            let res = await axios.post('http://127.0.0.1:8000/account/api/token/refresh', {
                 email: email,
                 password: password
-            }).then((res) => {
-                // console.log(res.data.token.access);
-                // console.log(res);
-                if (res.data.message === "Invalid email or password!") {
-                    console.log("poda");
-                    window.alert("something went wrong!")
-                } else {
-                    setAuthtokens(res.data)
-                    setFirstname(res.data.user.firstname)
-                    console.log(res.data.user.firstname);
-                    setUser(jwt_decode(res.data.token.access))
-                    console.log(jwt_decode(res.data.token.access))
-                    localStorage.setItem('firstname', JSON.stringify(res.data.user.firstname))
-                    localStorage.setItem('authToken', (res.data))
-                    navigate('/')
-                    // console.log(res.data.token.access);
-                }
             })
+            if (res.data.message === "Invalid email or password!") {
+                console.log("poda");
+                window.alert("something went wrong!")
+            } else {
+                setAuthtokens(res.data)
+                setFirstname(res.data.user.firstname)
+                console.log(res.data.user.firstname);
+                setUser(jwt_decode(res.data.token.access))
+                console.log(jwt_decode(res.data.token.access))
+                localStorage.setItem('firstname', JSON.stringify(res.data.user.firstname))
+                localStorage.setItem('authToken', (res.data))
+                navigate('/')
+            }
 
-            // setSubmitted(true);
-            // setError(false);
+
         }
     };
 
     let contextData = {
-        open : open,
+        open: open,
         user: user,
         userRole: userRole,
         userEmail: userEmail,
         firstname: firstname,
         otpstatus: otpstatus,
         isAdmin: isAdmin,
-        alertMessage:alertMessage,
-        tokendetails:tokendetails,
+        alertMessage: alertMessage,
+        tokendetails: tokendetails,
 
-        setOpen : setOpen,
+        setOpen: setOpen,
         setuserRole: setuserRole,
         loginsubmit: loginsubmit,
         Otploginphone: Otploginphone,
         otpsubmit: otpsubmit,
-        logoutUser: logoutUser
+        logoutUser: logoutUser,
+        tokenrefresher: tokenrefresher
     }
     return (
         <AuthContext.Provider value={contextData}>

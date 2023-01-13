@@ -22,6 +22,7 @@ export function CheckPendingRequests(props) {
     console.log(id);
     useEffect(() => {
         axios?.get('http://127.0.0.1:8000/admin_eduapp/teachers-pending/' + id).then((response) => {
+            console.log(response);
             console.log(response.data);
             setTeacher(response.data)
         })

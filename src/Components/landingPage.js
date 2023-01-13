@@ -21,9 +21,6 @@ export function LandingPage() {
         <div>
             <NavBar></NavBar>
             <div className="space-after-nav"></div>
-            {/* {
-                userRole==='T' ?   <TeacherHome></TeacherHome> : userRole === 'S' ? <Studenthome></Studenthome>: <Nonlanding></Nonlanding> 
-            } */}
             <Nonlanding></Nonlanding>
            
         </div>
