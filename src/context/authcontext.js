@@ -25,8 +25,12 @@ export const AuthProvider = ({ children }) => {
     let [otpstatus, setOtpstatus] = useState('no')
     let [open, setOpen] = useState(false)
     let [alertMessage, setAlertMessage] = useState('')
+    let [loading, setLoading] = useState(true)
 
     const navigate = useNavigate()
+
+
+    let BASE_URL = "http://127.0.0.1:8000"
 
     const loginsubmit = (e) => {
         e.preventDefault();
@@ -87,11 +91,11 @@ export const AuthProvider = ({ children }) => {
                     } else {
                         navigate('/')
                     }
-                  
+
                 }
             })
 
-     
+
         }
     };
 
@@ -132,7 +136,7 @@ export const AuthProvider = ({ children }) => {
                     console.log("poda");
                     window.alert("invalid otp")
                 } else {
-                    setAuthtokens(res.data)
+                    setAuthtokens(res.data.token)
                     setFirstname(res.data.user.firstname)
                     console.log(res.data.user.firstname);
                     setUser(jwt_decode(res.data.token.access))
@@ -163,7 +167,7 @@ export const AuthProvider = ({ children }) => {
                 setuserRole('teacher')
                 localStorage.setItem('role', JSON.stringify('teacher'))
             }
-            setAuthtokens(res.data)
+            setAuthtokens(res.data.token)
             setFirstname(res.data.user.firstname)
             setIsAdmin(res.data.user.isAdmin)
             setUserEmail(res.data.user.email)
@@ -201,35 +205,34 @@ export const AuthProvider = ({ children }) => {
     }
 
 
-    const updateToken = async (e) => {
-        e.preventDefault();
-        console.log("work ayade?");
-        let email = e.target.email.value
-        let password = e.target.password.value
-        if (email === '' || password === '') {
-            window.alert("enter correct")
-        } else {
-            let res = await axios.post('http://127.0.0.1:8000/account/api/token/refresh', {
-                email: email,
-                password: password
-            })
-            if (res.data.message === "Invalid email or password!") {
-                console.log("poda");
-                window.alert("something went wrong!")
-            } else {
-                setAuthtokens(res.data)
-                setFirstname(res.data.user.firstname)
-                console.log(res.data.user.firstname);
-                setUser(jwt_decode(res.data.token.access))
-                console.log(jwt_decode(res.data.token.access))
-                localStorage.setItem('firstname', JSON.stringify(res.data.user.firstname))
-                localStorage.setItem('authToken', (res.data))
-                navigate('/')
-            }
+    const updateToken = async () => {
+        let response = await fetch('http://127.0.0.1:8000/account/api/token/refresh/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'refresh': authtokens?.refresh })
+        })
 
+        let res = await response.json()
 
-        }
-    };
+        console.log('first');
+        console.log(res);
+        let tokendetail = jwt_decode(res.access)
+        setTokendetails(tokendetail)
+        setAuthtokens(res)
+    }
+
+    // useEffect(() => {
+    //     let fourMinutes = 1000*60*40
+
+    //     let interval = setInterval(() => {
+    //         if (authtokens) {
+    //             updateToken()
+    //         }
+    //     }, fourMinutes)
+    //     return () => clearInterval(interval)
+    // })
 
     let contextData = {
         open: open,
@@ -241,6 +244,8 @@ export const AuthProvider = ({ children }) => {
         isAdmin: isAdmin,
         alertMessage: alertMessage,
         tokendetails: tokendetails,
+        authtokens:authtokens,
+        BASE_URL:BASE_URL,
 
         setOpen: setOpen,
         setuserRole: setuserRole,

@@ -43,7 +43,7 @@ export function ChapterMaterial() {
                                     </h2>
                                     <div id={"hello"+key+1} className="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                         <div className="accordion-body">
-                                            <a className="course-material-link" target="_blank" href={`http://127.0.0.1:8000/${mat.files}`}>{mat.file_name}</a>
+                                            <a className="course-material-link" target="_blank" href={`http://127.0.0.1:8000${mat.files}`}>{mat.file_name}</a>
 
                                         </div>
                                     </div>

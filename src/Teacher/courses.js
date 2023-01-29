@@ -49,6 +49,7 @@ export function CoursePage() {
                         <th scope="col">#</th>
                         <th scope='col'>Subject</th>
                         <th scope="col">Grade</th>
+                        <th scope="col">Price</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -61,6 +62,7 @@ export function CoursePage() {
                                 <td>{key + 1}</td>
                                 <td>{cours.subject_id}</td>
                                 <td>{cours.grade}</td>
+                                <td>₹ {cours.price}</td>
                                 <td>
                                     <Link to={{pathname:`/course-page/${cours.slug}`,state: { users: cours }}}>
                                         <button className="add-content">view</button>

@@ -35,9 +35,15 @@ import { Adminsubjects } from './AdminPages/adminSubjects';
 import { PendingRequests } from './AdminPages/pendingrequest';
 import { CheckPendingRequests } from './AdminPages/checkPendingRequests';
 
+
 import NotLoggedIn from './utils/NotLoggedIn';
 import LoggedIn from './utils/LoggedIn';
 // import { AdminBase } from './AdminPages/adminMain';
+
+
+
+import Chatapp from './Chat/Chat';
+import { Conversations } from './Chat/Conversations';
 
 function App() {
 
@@ -52,6 +58,8 @@ function App() {
 
             <Route path='otplogin' element={<OtpLoginPage />} />
 
+            <Route path="chatapp" element={<Conversations />} />
+            <Route path='chatapp/chats/:conversationName' element = {<Chatapp />} />
 
             <Route path="/register" element={<Registerpage />} />
             <Route element={<PrivateRoute />} >

@@ -38,7 +38,7 @@ export function AddNewCourse( props) {
     data.append('image', e.target.image.files[0])
     data.append('subject_id', e.target.subject.value)
     data.append('grade', e.target.grade.value)
-    // data.append('title', e.target.title.value)
+    data.append('price', e.target.price.value)
     data.append('course_description', e.target.course_description.value)
 
     console.log(data);
@@ -109,6 +109,10 @@ const handlesubject = (e) => {
                   <div className="col-md-12">
                     <label htmlFor="">Course Description</label>
                     <input className="form-control" type="text" name="course_description" />
+                  </div>
+                  <div className="col-md-12">
+                      <label htmlFor="">Price</label>
+                      <input className="form-control" type="number" min={0} name="price"  />
                   </div>
                   <div>
                     <label htmlFor="">Upload Image</label>

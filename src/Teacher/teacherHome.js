@@ -16,17 +16,19 @@ export function TeacherHome() {
 
     const [allsubjects, setAlldubjects] = useState([])
     const [selSubject, setSelSubjects] = useState([])
+    const [userdetails, getUserDetails] = useState()
 
     const { firstname } = useContext(AuthContext)
     const { user } = useContext(AuthContext)
+    const { authtokens } = useContext(AuthContext)
     const { tokendetails } = useContext(AuthContext)
     const { tokenrefresher } = useContext(AuthContext)
 
     // console.log(tokendetails);
     let check = tokendetails.datafilled
     let checkdata = tokendetails.verified
-    console.log((tokendetails));
-    console.log(check);
+    // console.log((authtokens.token.access));
+
 
     const handleDelete = () => {
         console.info('You clicked the delete icon.');
@@ -42,9 +44,30 @@ export function TeacherHome() {
 
     }
 
+    const getteacherdetails = async () => {
+        let response = await fetch('http://127.0.0.1:8000/teacher/get-each-teacher', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + String(authtokens?.token.access)
+            }
+        })
+        console.log(authtokens.token.access);
+        let data = await response.json()
+        console.log(data);
+        getUserDetails(data)
+    }
+
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/courses/all-subjects').then((response) => {
             setAlldubjects(response.data)
+            // console.log(response.data);
+            // let hello = response.data
+            // hello.map((title)=> {
+            //     console.log(title.title);
+            // })
+            // console.log('test');
+            getteacherdetails()
         })
 
     }, [])
@@ -77,7 +100,7 @@ export function TeacherHome() {
         data.append('course_description', e.target.course_description.value)
 
         console.log(data);
-        axios.post('http://127.0.0.1:8000/courses/create-course',data).then((res) => {
+        axios.post('http://127.0.0.1:8000/courses/create-course', data).then((res) => {
             console.log(res);
         })
 
@@ -140,7 +163,24 @@ export function TeacherHome() {
                         <h2>Your data is under verification</h2>
                     </div> :
                     <div>
-                        test
+                        <div className="container ">
+                            <div className="card shadow my-5">
+                                <div className="card-body teacher-div">
+                                    <div className="teacher-image ">
+                                        <img className="rounded-circle" width={"250px"} src={`http://127.0.0.1:8000${userdetails?.profile_image}`} alt="" />
+                                        <p className="h5 text-capitalize">{userdetails?.get_teacher_name}</p>
+                                    </div>
+                                    <div className="teacher-phone-email">
+                                            <p><span className="h6">Email: </span>{userdetails?.get_teacher_email}</p>
+                                            <p><span className="h6">Mobile No: </span>{userdetails?.get_teacher_mobile}</p>
+                                    </div>
+                                    <div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
                     </div>
             }
         </div>

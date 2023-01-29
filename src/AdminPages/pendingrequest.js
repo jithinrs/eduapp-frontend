@@ -9,7 +9,7 @@ export function PendingRequests() {
     const [pendingRequests, setPendingRequests] = useState([])
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/admin_eduapp/teachers-list').then((response) => {
+        axios.get('http://127.0.0.1:8000/admin_eduapp/teachers-pending-request').then((response) => {
             console.log(response.data);
             setPendingRequests(response.data)
         })
@@ -35,7 +35,8 @@ export function PendingRequests() {
                     </tr>
                 </thead>
                 <tbody>
-                    {pendingRequests.map((person, key) => {
+                    {
+                    pendingRequests.map((person, key) => {
                         return (
 
                             <tr>
@@ -45,7 +46,7 @@ export function PendingRequests() {
                                 <td>{person.get_teacher_mobile}</td>
                                 {/* {let test = "hello"} */}
                                 <td>
-                                    <Link to={{pathname:`/admint/check-pending-requests/${person.user_id}`,state: { users: person }}}><button>test</button></Link>
+                                    <Link to={{pathname:`/admint/check-pending-requests/${person.user_id}`,state: { users: person }}}><button className="btn btn-danger">test</button></Link>
                                 </td>
                             </tr>
 

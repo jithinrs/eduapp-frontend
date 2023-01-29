@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -15,6 +15,8 @@ export function Studenthome() {
     const { tokendetails } = useContext(AuthContext)
     const { user } = useContext(AuthContext)
     const { tokenrefresher } = useContext(AuthContext)
+    const [courses, setCourses] = useState([])
+
 
 
     console.log(tokendetails);
@@ -22,7 +24,15 @@ export function Studenthome() {
     console.log(verified1);
     let check = tokendetails.datafilled
 
-
+    const getstudentcourses = () => {
+        axios.get('http://127.0.0.1:8000/student/student-courses/' + tokendetails?.user_id).then((response) => {
+            console.log(response);
+            setCourses(response.data)
+        })
+    }
+    useEffect(() => {
+        getstudentcourses()
+    }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -107,6 +117,48 @@ export function Studenthome() {
                             <Link to='/browse-courses'>
                                 <button className="btn btn-primary">Browse Courses</button>
                             </Link>
+                            {
+                                courses.length !== 0 ?
+
+                                    <div className="container ">
+                                        <h1>
+                                            Courses
+                                        </h1>
+                                        <table className="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope='col'>Subject</th>
+                                                    <th scope="col">Grade</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {courses.map((cours, key) => {
+                                                    // console.log(cours.title);
+                                                    return (
+
+                                                        <tr key={key}>
+                                                            <td>{key + 1}</td>
+                                                            <td>{cours.subject_id}</td>
+                                                            <td>{cours.grade}</td>
+                                                            <td>
+                                                                <Link to={{ pathname: `/browse-courses/${cours.slug}`, state: { users: cours } }}>
+                                                                    <button className="add-content">view</button>
+                                                                </Link>
+                                                            </td>
+                                                        </tr>
+
+                                                    )
+                                                })}
+                                            </tbody>
+                                        </table>
+                                        {/* <AddNewCourse funct={hello}></AddNewCourse> */}
+
+                                    </div>
+
+                                    : null
+                            }
                         </div>
                     </div>
             }

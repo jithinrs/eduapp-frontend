@@ -13,6 +13,7 @@ export function AllCoursePage() {
     const [subject, setSubject] = useState([])
 
     const { user } = useContext(AuthContext)
+    const { BASE_URL } = useContext(AuthContext)
     console.log(user);
     let user_id = user.user.user_id
 
@@ -48,8 +49,7 @@ export function AllCoursePage() {
         })
         // axios.
     }
-
-    let image_url = 'http://127.0.0.1:8000/'
+    
     return (
         <div>
             <NavBar></NavBar>
@@ -88,7 +88,7 @@ export function AllCoursePage() {
                                     return (
 
                                         <div key={key} className="card" style={{ width: "14rem" }}>
-                                            <img src={image_url + cours.image} className="card-img-top" alt="..."></img>
+                                            <img src={BASE_URL + cours.image} className="mt-2 card-img-top" alt="..."></img>
                                             <div className="card-body">
                                                 <h5 className="card-title">{cours.grade}</h5>
                                                 <p className="card-text">{cours.subject_id}</p>

@@ -30,3 +30,22 @@
     text-decoration: none;
     color: #F53838;
 }
+
+
+.teacher-div{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    gap: 20px;
+}
+
+.teacher-phone-email{
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+
+}

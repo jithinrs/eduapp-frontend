@@ -85,3 +85,8 @@
     color: white;
     font-weight: 500;
 }
+
+.dropdown-menu{
+    width: 400px;
+    background-color: rgb(172, 172, 172);
+}
